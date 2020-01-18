@@ -1,0 +1,85 @@
+//백준 1935번 - 후위 표기식2
+//https://www.acmicpc.net/problem/1935
+
+//참고한 정답 코드
+//https://jaimemin.tistory.com/829?category=988050
+
+//참고 코드 본 후 내가 작성한 코드
+#include <stack>
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+	//피연산자 개수
+	int N;
+	//후위표기식을 받을 변수
+	string input;
+	//각 피연산자들의 값
+	int value[26] = { 0, };
+	//피연산자 값을 넣을 스택
+	stack<double> s;
+
+	cin >> N >> input;
+
+	for (int i = 0; i < N; i++) {
+		cin >> value[i];
+	}
+
+	//계산할 연산자를 저장
+	char opt;
+	//계산할 앞피연산자 저장
+	double opr1 = 0;
+	//계산할 뒤피연산자 저장
+	double opr2 = 0;
+	//계산된 값을 저장함
+	double result;
+	for (int i = 0; i < input.length(); i++) {
+
+		//피연산자라면 값을 넣어줘야함
+		if (input[i] >= 'A' && input[i] <= 'Z') {
+
+			//이건 참고한 정답코드에서 너무 충격받아서 아직도 기억남
+			s.push(value[input[i] - 'A']);
+
+		}
+		//연산자라면
+		else {
+			opr2 = s.top();
+			s.pop();
+			opr1 = s.top();
+			s.pop();
+
+			switch (input[i]) {
+			case '+':
+				result = opr1 + opr2;
+				s.push(result);
+
+				break;
+			case '-':
+				result = opr1 - opr2;
+				s.push(result);
+
+				break;
+			case '*':
+				result = opr1 * opr2;
+				s.push(result);
+
+				break;
+			case '/':
+				result = opr1 / opr2;
+				s.push(result);
+
+				break;
+			}//switch end
+
+		}//if end
+
+	}//for end
+
+	cout << fixed;
+	cout.precision(2);
+	cout << s.top();
+
+	return 0;
+}
