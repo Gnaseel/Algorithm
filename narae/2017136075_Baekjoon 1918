@@ -1,0 +1,86 @@
+//백준 1918번 - 후위 표기식
+//https://www.acmicpc.net/problem/1918
+
+//참고한 정답 알고리즘
+//https://jaimemin.tistory.com/828
+
+//참고 코드 본 후 내가 작성한 코드
+#include <iostream>
+#include <stack>
+#include <string>
+#include <stdio.h>
+using namespace std;
+
+int main() {
+
+	//입력받는 문자열 변수
+	string input;
+	//연산자를 저장할 스택
+	stack<char> opt;
+	//마지막으로 출력할 변수
+	string result;
+
+	cin >> input;
+
+	for (int i = 0; i < input.length(); i++) {
+		//피연산자라면
+		if (input[i] >= 'A' && input[i] <= 'z') {
+			result += input[i];
+		}
+		else {
+			switch (input[i]) {
+
+				//여는 괄호를 만날 경우, 닫는 괄호를 만날 때까지 스택에 넣는다
+			case '(':
+
+				opt.push(input[i]);
+
+				break;
+			case ')':
+
+				while (!opt.empty() && opt.top() != '(') {
+					result += opt.top();
+					opt.pop();
+				}
+
+				//얘가 있어야지 마지막 '('가 나감
+				opt.pop();
+
+				break;
+			case '+':
+			case '-':
+
+				//여기에 마지막 opt.top() != '('를 넣어야 정답처리가 되는데 이해가 잘 안됨
+				while (!opt.empty() && (opt.top() == '+' || opt.top() == '-' || opt.top() != '(')) {
+					result += opt.top();
+					opt.pop();
+				}
+				opt.push(input[i]);
+
+
+				break;
+			case '*':
+			case '/':
+
+				while (!opt.empty() && (opt.top() == '*' || opt.top() == '/')) {
+					result += opt.top();
+					opt.pop();
+				}
+				opt.push(input[i]);
+
+
+				break;
+
+			}//switch end
+		}//if end
+	}//for end
+
+	while (!opt.empty()) {
+		result += opt.top();
+		opt.pop();
+	}
+
+	cout << result << "\n";
+
+	return 0;
+}
